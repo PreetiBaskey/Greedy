@@ -1,0 +1,39 @@
+//approach - 1
+//time complexity - O(nlogn)
+//space complexity - O(1) or O(logn)
+class Solution {
+public:
+    int bagOfTokensScore(vector<int>& tokens, int power) {
+        int n = tokens.size();
+
+        // Sort tokens to greedily spend power on the smallest values 
+        // and gain power from the largest values
+        sort(tokens.begin(), tokens.end());
+
+        int maxScore = 0;
+        int score = 0;
+        int i = 0, j = n - 1; // i: smallest tokens, j: largest tokens
+
+        while(i <= j) {
+            // Case 1: If we have enough power, play the smallest token face-up to gain score
+            if(power >= tokens[i]) {
+                power -= tokens[i];
+                score++;
+                i++;
+                maxScore = max(maxScore, score); // Update the highest score achieved
+            }
+            // Case 2: If we lack power but have score, play the largest token face-down to gain power
+            else if(score >= 1) {
+                power += tokens[j];
+                score--;
+                j--;
+            }
+            // Case 3: Cannot move forward (not enough power and no score to trade)
+            else {
+                return maxScore;
+            }
+        }
+
+        return maxScore;
+    }
+};
