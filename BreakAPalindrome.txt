@@ -1,0 +1,35 @@
+//approach - 1
+//time complexity - O(n)
+//space complexity - O(1)
+class Solution {
+public:
+    string breakPalindrome(string palindrome) {
+        int n = palindrome.length();
+
+        // A single character string is always a palindrome; 
+        // it's impossible to change it into a non-palindrome.
+        if(n <= 1) {
+            return "";
+        }
+
+        int i;
+        // Iterate only through the first half of the string.
+        // (Changing the middle character of an odd-length palindrome 
+        // still leaves it as a palindrome, e.g., "aba" -> "aaa").
+        for(i = 0; i < n / 2; i++) {
+            // Greedy: Change the first character that isn't 'a' to 'a' 
+            // to get the smallest possible lexicographical result.
+            if(palindrome[i] != 'a') {
+                palindrome[i] = 'a';
+                return palindrome;
+            }
+        }
+
+        // If the loop completes, it means all characters in the first half were 'a's.
+        // To make it non-palindromic and keep it lexicographically smallest, 
+        // change the very last character to 'b' (e.g., "aaaa" -> "aaab").
+        palindrome[n - 1] = 'b';
+
+        return palindrome;
+    }
+};
