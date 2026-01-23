@@ -1,0 +1,32 @@
+//approach - 1
+//time complexity - O(nlogn)
+//space complexity - O(1) or O(logn) - for recursion stack space
+class Solution {
+public:
+    int numRescueBoats(vector<int>& people, int limit) {
+        int n = people.size();
+
+        // Sort people by weight to use a two-pointer greedy approach
+        sort(people.begin(), people.end());
+        
+        int i = 0;              // Pointer to the lightest person
+        int j = n - 1;          // Pointer to the heaviest person
+        int noOfBoats = 0;
+
+        while(i <= j) {
+            // If the lightest and heaviest can fit in one boat
+            if(people[i] + people[j] <= limit) {
+                i++;            // Lightest person is paired, move to next
+                j--;            // Heaviest person is paired, move to next
+            }
+            // If they can't fit together, the heaviest person must take a boat alone
+            else {
+                j--;            // Heaviest person takes a boat, move to next heaviest
+            }
+            
+            noOfBoats++;        // A boat is sent off in either case
+        }
+
+        return noOfBoats;
+    }
+};
