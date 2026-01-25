@@ -38,7 +38,7 @@
 
 //approach - 2
 //time complexity - O(nlogn)
-//space complexity - O(logn)
+//space complexity - O(1)
 class Solution {
 public:
     int maximumBags(vector<int>& capacity, vector<int>& rocks, int additionalRocks) {
