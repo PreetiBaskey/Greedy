@@ -1,0 +1,34 @@
+//approach - 1
+//time complexity - O(n)
+//space complexity - O(1)
+
+// The most important observation to solve this problem is that
+// Alice's and Bob's moves are completely independent.
+// Unlike many game theory problems where one player's move affects the opponent's future possibilities, in this game:
+
+//     No new moves are created: Removing an 'A' will never create a new triple of 'B's (BBB), and removing a 'B' will never create a new triple of 'A's (AAA).
+//     Moves only decrease: Removing a piece can only decrease the number of moves available to the current player in that specific cluster; it has zero impact on the opponent's available pieces
+class Solution {
+public:
+    bool winnerOfGame(string colors) {
+        int n = colors.length();
+
+        int alex = 0;
+        int bob = 0;
+        for(int i = 1; i < n - 1; i++) {
+            if(colors[i] == 'A') {
+                if(colors[i - 1] == 'A' && colors[i + 1] == 'A') {
+                    alex++;
+                }
+            }
+            else if(colors[i] == 'B') {
+                if(colors[i - 1] == 'B' && colors[i + 1] == 'B') {
+                    bob++;
+                }
+            }
+        }
+        
+
+        return alex > bob;
+    }
+};
