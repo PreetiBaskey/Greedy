@@ -1,0 +1,30 @@
+//approach - 1
+//time complexity - O(nlogn)
+//space complexity - O(1) or O(nlogn) -  it may use O(logn) stack space for the recursive calls
+class Solution {
+public:
+    int maximumElementAfterDecrementingAndRearranging(vector<int>& arr) {
+        int n = arr.size();
+
+        // Step 1: Sort to process elements in increasing order
+        sort(arr.begin(), arr.end());
+
+        // Step 2: Ensure the first element follows the rule (must be 1)
+        if(arr[0] != 1) {
+            arr[0] = 1;
+        }
+
+        // Step 3: Iterate and enforce the "adjacent difference <= 1" rule
+        for(int i = 1; i < n; i++) {
+            // If the current element is too large compared to the previous one,
+            // decrement it to the maximum allowed value (previous + 1)
+            if(abs(arr[i] - arr[i - 1]) > 1) {
+                arr[i] = arr[i - 1] + 1;
+            }
+        }
+
+        // Step 4: After processing, the last element is the maximum possible value
+        return arr[n - 1];
+    }
+};
+              
