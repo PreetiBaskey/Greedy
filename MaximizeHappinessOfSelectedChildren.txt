@@ -1,0 +1,62 @@
+//approach - 1
+//time complexity - O(nlogn)
+//space complexity - O(n^2) - it will give time limit exceeded error
+// class Solution {
+// public:
+//     long long maximumHappinessSum(vector<int>& happiness, int k) {
+//         int n = happiness.size();
+//         long long result = 0;
+
+//         comparator = [&](&a1, &a2) {
+//             return a
+//         }
+
+//         sort(happiness.begin(), happiness.end(), comparator);
+
+//         int tempK = 0;
+//         for(int i = n - 1; i >= 0; i--) {
+//             if(tempK < k) {
+//                 result += happiness[i];
+//                 tempK++;
+//             }
+//             for(int j = 0; j < i; j++) {
+//                 if(happiness[j] > 0) {
+//                     happiness[j] = happiness[j] - 1;
+//                 }
+//             }
+//         }
+
+//         return result;
+//     }
+// };
+
+
+
+
+//approach - 2
+//time complexity - O(nlogn)
+//space complexity - O(1) or O(logn)
+class Solution {
+public:
+    long long maximumHappinessSum(vector<int>& happiness, int k) {
+        long long result = 0;
+
+        // Step 1: Sort in descending order to pick the largest happiness values first
+        sort(happiness.begin(), happiness.end(), greater<int>());
+
+        int count = 0; // Tracks how many children have been picked (turns passed)
+        
+        // Step 2: Pick 'k' children and account for the happiness decay
+        for(int i = 0; i < k; i++) {
+            // Each turn, the remaining children's happiness decreases by 1.
+            // 'count' represents the total reduction for the current child.
+            // Use max(0, ...) to ensure happiness doesn't become negative.
+            result += max(0, happiness[i] - count);
+            
+            // Increment the decay amount for the next child
+            count++;
+        }
+
+        return result;
+    }
+};
