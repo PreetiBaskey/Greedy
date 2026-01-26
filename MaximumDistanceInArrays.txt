@@ -1,0 +1,30 @@
+//approach - 1
+//time complexity - O(n) - If n is the number of sub-arrays
+//space complexity - O(1)
+class Solution {
+public:
+    int maxDistance(vector<vector<int>>& arrays) {
+        int n = arrays.size();
+        
+        // Step 1: Initialize global min and max using the first array
+        int MIN = arrays[0].front();
+        int MAX = arrays[0].back();
+        int result = 0;
+
+        // Step 2: Iterate through the rest of the arrays
+        for(int i = 1; i < n; i++) {
+            int currMin = arrays[i].front();
+            int currMax = arrays[i].back();
+
+            // Step 3: Calculate distance between current array and extremes of PREVIOUS arrays.
+            // This ensures we always pick elements from two DIFFERENT arrays.
+            result = max({result, abs(MIN - currMax), abs(MAX - currMin)});
+
+            // Step 4: Update global extremes to include the current array for future comparisons
+            MIN = min(MIN, currMin);
+            MAX = max(MAX, currMax);
+        }
+
+        return result;
+    }
+};
