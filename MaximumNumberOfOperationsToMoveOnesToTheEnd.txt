@@ -1,0 +1,39 @@
+//approach - 1
+//time complexity - O(n)
+//space complexity - O(1)
+class Solution {
+public:
+    int maxOperations(string s) {
+        int n = s.length();
+        int i = 0;
+        int count1Seen = 0; // Number of '1's encountered that are ready to move
+        int result = 0;      // Total operations performed
+
+        while (i < n) {
+            // Case 1: We hit a group of zeros (a "gap")
+            if (s[i] == '0') {
+                /* 
+                 * Each '1' seen so far can move past this entire block of '0's.
+                 * This counts as one operation for EACH '1' previously encountered.
+                 */
+                result += count1Seen;
+
+                // Skip all consecutive '0's as they belong to the same "jump"
+                while (i < n && s[i] == '0') {
+                    i++;
+                }
+            }
+            // Case 2: We hit a '1'
+            else {
+                /*
+                 * Increment our counter of '1's. These '1's will be added to 
+                 * the result the next time we encounter a '0' block.
+                 */
+                count1Seen++;
+                i++;
+            }
+        }
+
+        return result;
+    }
+};
