@@ -1,0 +1,25 @@
+//approach - 1
+//time complexity - O(n + m) - m is the size of banned vector/array
+//space complexity - O(m)
+class Solution {
+public:
+    int maxCount(vector<int>& banned, int n, int maxSum) {
+        unordered_set<int> st;
+        for(int &ele: banned) {
+            st.insert(ele);
+        }
+
+        int currSum = 0;
+        int result = 0;
+        for(int i = 1; i <= n; i++) {
+            if(st.find(i) == st.end()) {
+                if(currSum + i <= maxSum) {
+                    result++;
+                    currSum += i;
+                }
+            }
+        }
+
+        return result;
+    }
+};
