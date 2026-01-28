@@ -1,0 +1,39 @@
+//approach - 1
+//time complexity - O(n)
+//space complexity - O(n)
+class Solution {
+public:
+    int minimumRounds(vector<int>& tasks) {
+        // Step 1: Count the frequency of each task difficulty
+        unordered_map<int, int> mp;
+        for(int &task: tasks) {
+            mp[task]++;
+        }
+
+        int rounds = 0;
+        for(auto &it: mp) {
+            int count = it.second;
+
+            // Step 2: If only 1 task exists, it's impossible (needs groups of 2 or 3)
+            if(count == 1) {
+                return -1;
+            }
+
+            /* 
+               Step 3: Greedy Strategy
+               - If divisible by 3, use all 3-task groups.
+               - If remainder is 1 or 2, adding 1 extra round covers it.
+                 (e.g., 4 = 2+2, 7 = 3+2+2). 
+               Formula: rounds += (count + 2) / 3; 
+            */
+            if(count % 3 == 0) {
+                rounds += count / 3;
+            }
+            else {
+                rounds += (count / 3) + 1;
+            }
+        }
+
+        return rounds;
+    }
+};
