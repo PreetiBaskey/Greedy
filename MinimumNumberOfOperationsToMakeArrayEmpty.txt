@@ -1,0 +1,41 @@
+//approach - 1
+//time complexity - O(n)
+//space complexity - O(n)
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+        // Step 1: Count the frequency of each number
+        // We use an unordered_map for O(n) average time complexity.
+        unordered_map<int, int> mp;
+        for(int &num: nums) {
+            mp[num]++;
+        }
+
+        int result = 0;
+        
+        // Step 2: Calculate the minimum operations for each unique number
+        for(auto &it: mp) {
+            int count = it.second;
+
+            // If a number appears only once, it's impossible to remove it 
+            // because operations only allow deleting 2 or 3 elements.
+            if(count == 1) {
+                return -1;
+            }
+
+            /* 
+               Logic for minimum operations:
+               - We want to use as many "remove 3" operations as possible (Greedy).
+               - Any count >= 2 can be covered by a combination of 2s and 3s.
+               - Math Trick: ceil(count / 3.0) gives the minimum operations.
+                 Example: 
+                 count=2 -> ceil(0.66) = 1 op (one '2')
+                 count=4 -> ceil(1.33) = 2 ops (two '2's)
+                 count=7 -> ceil(2.33) = 3 ops (two '2's + one '3')
+            */
+            result += ceil((double)count / 3);
+        }
+
+        return result;
+    }
+};
