@@ -1,0 +1,40 @@
+//approach - 1
+//time complexity - O(nlogn)
+//space complexity - O(n)
+class Solution {
+public:
+    // P is unused here, but can be useful for other versions of the problem
+    typedef pair<int, int> P;
+
+    int eliminateMaximum(vector<int>& dist, vector<int>& speed) {
+        int n = dist.size();
+        vector<int> arrivalTimes(n);
+        
+        // 1. Calculate when each monster will reach the city.
+        // Formula: time = distance / speed. We use ceil to find the 
+        // exact minute they arrive. (e.g., 2.1 minutes means they arrive at minute 3).
+        for(int i = 0; i < n; i++) {
+            arrivalTimes[i] = ceil((float) dist[i] / speed[i]);
+        }
+        
+        // 2. Greedy Strategy: Sort arrival times to always prioritize 
+        // the monster that reaches the city earliest.
+        sort(begin(arrivalTimes), end(arrivalTimes));
+        
+        int count = 1;      // We always eliminate the first monster at minute 0.
+        int time_passed = 1; // Our weapon recharges and is ready again at minute 1.
+        
+        // 3. Check each subsequent monster against our current "game time".
+        for(int i = 1; i < n; i++) {
+            // If the monster's arrival time is less than or equal to 
+            // the time we've spent, it reaches the city before we can shoot it.
+            if(arrivalTimes[i] - time_passed <= 0)
+                return count;
+            
+            count++;        // Successfully eliminated another monster.
+            time_passed++;  // Weapon takes 1 minute to recharge.
+        }
+        
+        return count; // Successfully eliminated all monsters or as many as possible.
+    }
+};
