@@ -1,0 +1,39 @@
+//approach - 1
+//time complexity - O(n)
+//space complexity - O(n)
+class Solution {
+public:
+    int minTaps(int n, vector<int>& ranges) {
+        // Step 1: Preprocessing - Transform intervals into a Jump Game format.
+        // startEnd[i] stores the farthest point reachable starting at or before index i.
+        vector<int> startEnd(n + 1, 0);
+        for(int i = 0; i < ranges.size(); i++) {
+            int start = max(0, i - ranges[i]);
+            int end = min(n, i + ranges[i]);
+            startEnd[start] = max(startEnd[start], end);
+        }
+
+        int taps = 0;      // Number of taps opened
+        int maxEnd = 0;    // Farthest point we can reach with the next available tap
+        int currEnd = 0;   // Farthest point reachable with the current number of taps
+
+        // Step 2: Greedy approach to cover the garden [0, n]
+        for(int i = 0; i <= n; i++) {
+            // Gap detected: if current index is beyond the farthest reachable point
+            if(i > maxEnd) {
+                return -1;
+            }
+
+            // If we've reached the end of the current tap's coverage, open a new one
+            if(i > currEnd) {
+                taps++;
+                currEnd = maxEnd;
+            }
+
+            // Update the potential reach for the next jump/tap
+            maxEnd = max(maxEnd, startEnd[i]);
+        }
+
+        return taps;
+    }
+};
