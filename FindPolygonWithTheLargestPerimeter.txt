@@ -1,0 +1,26 @@
+class Solution {
+public:
+    long long largestPerimeter(vector<int>& nums) {
+        int n = nums.size();
+        
+        // 1. Sort sides in ascending order to greedily find the largest possible polygon
+        sort(nums.begin(), nums.end());
+
+        long long totalSum = 0;
+        long long maxPerimeter = -1;
+
+        for(int i = 0; i < n; i++) {
+            // 2. POLYGON CONDITION: The longest side (nums[i]) must be strictly 
+            // smaller than the sum of all other sides (totalSum).
+            // A polygon must have at least 3 sides (i >= 2).
+            if(i >= 2 && nums[i] < totalSum) {
+                maxPerimeter = totalSum + nums[i];
+            }
+
+            // 3. Keep track of the running sum of all sides encountered so far
+            totalSum += nums[i];
+        }
+
+        return maxPerimeter;
+    }
+};
