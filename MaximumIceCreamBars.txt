@@ -1,0 +1,25 @@
+//approach - 1
+//time complexity - O(nlogn)
+//space complexity - O(logn)
+class Solution {
+public:
+    int maxIceCream(vector<int>& costs, int coins) {
+        // Sort costs to pick cheapest ice creams first (Greedy approach)
+        sort(costs.begin(), costs.end());
+
+        int count = 0;
+        // Use reference (&) to avoid copying elements during iteration
+        for(int &cost : costs) {
+            // If current budget cannot afford the cheapest available bar, stop
+            if(coins < cost) {
+                return count; 
+            }
+            
+            // Subtract cost from budget and increment the tally
+            count++;
+            coins -= cost;
+        }
+
+        return count;
+    }
+};
