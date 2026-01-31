@@ -1,0 +1,43 @@
+//approach - 1
+//time complexity - O(logn)
+//space complexity - O(logn)
+class Solution {
+public:
+    int maxDiff(int num) {
+        string str1 = to_string(num); 
+        string str2 = str1;
+
+        // --- PART 1: MAXIMIZE THE NUMBER (str1) ---
+        // Find the first digit that isn't '9' and replace all its occurrences with '9'.
+        int idx = str1.find_first_not_of('9');
+        if(idx != string::npos) {
+            char ch = str1[idx];
+            replace(begin(str1), end(str1), ch, '9');
+        }
+
+        // --- PART 2: MINIMIZE THE NUMBER (str2) ---
+        for(int i = 0; i < str2.length(); i++) {
+            char ch = str2[i];
+
+            // Case A: Handling the first digit
+            if(i == 0) {
+                // If first digit isn't '1', replace it (and all its matches) with '1'.
+                // We don't use '0' because the problem forbids leading zeros.
+                if(ch != '1') {
+                    replace(begin(str2), end(str2), ch, '1');
+                    break;
+                }
+            }
+            // Case B: Handling subsequent digits
+            else if(ch != '0' && ch != str2[0]){
+                // Replace the first non-'0' digit with '0' to make the value smaller.
+                // We skip if ch == str2[0] because that would change the first digit to '0'.
+                replace(begin(str2), end(str2), ch, '0');
+                break;
+            }
+        }
+
+        // Return the difference between the largest possible and smallest possible versions.
+        return stoi(str1) - stoi(str2);
+    }
+};
