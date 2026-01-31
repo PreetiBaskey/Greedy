@@ -1,0 +1,106 @@
+/*
+    1. store count of R and D
+    2. idx = 0
+    3. if 'R' -> remove nearest 'D' towards right
+    4. if 'D' -> remove nearest 'R' towards right
+    5. Remeber :
+       -> idx-- to be done when we remove someone at an index < idx
+       -> (idx + 1) % n to be done for managing round direction  
+*/
+//approach - 1
+//time complexity - O(n^2)
+//space complexity - O(1) auxiliary space - O(n) if counting input string storage
+// class Solution {
+// public:
+//     // Helper to find and remove the next available opponent in a circular fashion
+//     bool removeSenator(string &senate, char ch, int idx) {
+//         bool checkRemovalLeftSide = false;
+
+//         while(true) {
+//             // If we wrap around to the start, the removal happened behind our current main loop index
+//             if(idx == 0) {
+//                 checkRemovalLeftSide = true;
+//             }
+
+//             // Target found: erase from string and stop searching
+//             if(senate[idx] == ch) {
+//                 senate.erase(begin(senate) + idx);
+//                 break;
+//             }
+        
+//             // Circular increment to continue search
+//             idx = (idx + 1) % (senate.length());
+//         }
+
+//         return checkRemovalLeftSide;
+//     } 
+
+//     string predictPartyVictory(string senate) {
+//         int RCount = count(begin(senate), end(senate), 'R');
+//         int DCount = senate.length() - RCount;
+
+//         int idx = 0;
+//         // Continue rounds until one party has no senators left
+//         while(RCount > 0 && DCount > 0) {
+//             if(senate[idx] == 'R') {
+//                 DCount--; // Radiant bans a Dire
+//                 bool checkRemovalLeftSide = removeSenator(senate, 'D', (idx + 1) % (senate.length()));
+                
+//                 // If a senator was removed at an index smaller than current 'idx', 
+//                 // we shift 'idx' back to stay aligned with the shrinking string
+//                 if(checkRemovalLeftSide) {
+//                     idx--;
+//                 }
+//             }
+//             else {
+//                 RCount--; // Dire bans a Radiant
+//                 bool checkRemovalLeftSide = removeSenator(senate, 'R', (idx + 1) % (senate.length()));
+//                 if(checkRemovalLeftSide) {
+//                     idx--;
+//                 }
+//             }
+
+//             // Move to the next senator's turn (with circular safety)
+//             idx = (idx + 1) % (senate.length());
+//         }
+
+//         return RCount == 0 ? "Dire" : "Radiant";
+//     }
+// };
+
+
+//approach - 2
+//time complexityt - O(n)
+//space complexity - O(n)
+class Solution {
+public:
+    string predictPartyVictory(string senate) {
+        int n = senate.length();
+        queue<int> qr, qd;
+
+        // Step 1: Store indices of Radiant and Dire senators in separate queues
+        for (int i = 0; i < n; i++) {
+            if (senate[i] == 'R') qr.push(i);
+            else qd.push(i);
+        }
+
+        // Step 2: Compare front-most senators from both parties
+        while (!qr.empty() && !qd.empty()) {
+            int r_idx = qr.front(); qr.pop();
+            int d_idx = qd.front(); qd.pop();
+
+            // The senator with the smaller index acts first and bans the other
+            if (r_idx < d_idx) {
+                // Radiant wins this round: re-queue with updated index for next round
+                qr.push(r_idx + n);
+            } else {
+                // Dire wins this round: re-queue with updated index for next round
+                qd.push(d_idx + n);
+            }
+        }
+
+        // Step 3: The party that still has senators remaining wins
+        return qr.empty() ? "Dire" : "Radiant";
+    }
+};
+
