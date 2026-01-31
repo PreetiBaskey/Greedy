@@ -1,0 +1,21 @@
+//approach - 1
+//time complexity - O(log(target))
+//space complexity - O(log(target))
+class Solution {
+public:
+    int brokenCalc(int startValue, int target) {
+        // Base case: If startValue is already larger, we can only use the decrement (subtraction) operation
+        if (startValue >= target) {
+            return startValue - target;
+        }
+
+        // Greedy strategy: Work backward from target to startValue
+        // 1. If target is even, the most efficient move was to multiply by 2 (so we divide)
+        if (target % 2 == 0) {
+            return 1 + brokenCalc(startValue, target / 2);
+        }
+        
+        // 2. If target is odd, the only way to reach it was by subtracting 1 (so we add 1)
+        return 1 + brokenCalc(startValue, target + 1);
+    }
+};
