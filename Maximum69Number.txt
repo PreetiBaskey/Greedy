@@ -1,0 +1,52 @@
+//approach - 1
+//time complexity - O(d) - time to parse the string back into an integer
+//space complexity - O(d) - string str to store the digits of the number. This requires space proportional to the number of digits
+// class Solution {
+// public:
+//     int maximum69Number (int num) {
+//         string str = to_string(num);
+//         int n = str.length();
+
+//         for(int i = 0; i < n; i++) {
+//             int number = str[i] - '0';
+//             if(number == 6) {
+//                 str[i] = '9';
+//                 return stoi(str);
+//             }
+//         }
+
+//         return num;
+//     }
+// };
+
+
+
+//approach - 2
+//time complexity - O(d) - while loop iterates once for each digit in num
+//space complexity - O(1)
+class Solution {
+public:
+    int maximum69Number (int num) { 
+        int placeValue = 0;
+        int placeValueSix = -1;
+
+
+        int tempNum = num;
+        while(tempNum != 0) {
+            int remainder = tempNum % 10;
+            
+            if(remainder == 6) {
+                placeValueSix = placeValue;
+            }
+            
+            tempNum = tempNum / 10;
+            placeValue++;
+        }
+
+        if(placeValueSix == -1) {
+            return num;
+        }
+
+        return num + 3 * pow(10, placeValueSix);
+    }
+};
