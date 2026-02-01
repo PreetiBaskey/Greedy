@@ -1,0 +1,24 @@
+//approach - 1
+//time complexity - O(nlogn)
+//space complexity - O(1) or O(logn)
+class Solution {
+public:
+    int minIncrementForUnique(vector<int>& nums) {
+        
+        // 1. Sort to process duplicates in order
+        sort(nums.begin(), nums.end());
+
+        int result = 0;
+        // 2. Iterate from the second element
+        for (int i = 1; i < nums.size(); i++) {
+            // 3. If current is not greater than previous, it's a duplicate or smaller
+            if (nums[i] <= nums[i - 1]) {
+                int needed = nums[i - 1] + 1; // It must be at least previous + 1
+                result += (needed - nums[i]); // Record moves
+                nums[i] = needed;             // Update current value
+            }
+        }
+
+        return result;
+    }
+};
