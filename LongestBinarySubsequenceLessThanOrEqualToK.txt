@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int longestSubsequence(string s, int k) {
+        int n = s.length();
+        int length = 0;
+        int powerValue = 1; // Tracks current power of 2 (2^0, 2^1, ...)
+
+        // Greedy Strategy: Iterate from right to left to keep the value as small as possible
+        for(int i = n - 1; i >= 0; i--) {
+            // Always include '0's as they increase length without increasing value
+            if(s[i] == '0') {
+                length += 1;
+            }
+            // Include '1' only if its positional value (2^p) doesn't exceed remaining budget k
+            else if(powerValue <= k) {
+                k -= powerValue;
+                length += 1;
+            }
+
+            // Update positional value for the next bit, but cap it to prevent integer overflow
+            if(powerValue <= k) {
+                powerValue *= 2;
+            }
+        }
+
+        return length;
+    }
+};
