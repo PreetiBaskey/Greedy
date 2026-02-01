@@ -1,0 +1,34 @@
+//approach - 1
+//time complexity - O(t), t - number of tasks
+//space complexity  - O(1)
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        // 1. Record frequency of each task (A-Z)
+        vector<int> mp(26, 0);
+        for(char &ch: tasks) {
+            mp[ch - 'A']++;
+        }
+
+        // 2. Sort frequencies to easily find the most frequent tasks
+        sort(mp.begin(), mp.end());
+
+        // 3. Logic: The most frequent task (mp[25]) defines the structure.
+        // If 'A' appears 3 times, we have: A _ _ A _ _ A
+        // There are (maxFreq - 1) gaps between them.
+        int maxFreq = mp[25];
+        int gapCount = maxFreq - 1;
+        int slotsAvailable = gapCount * n; // Total empty spots to fill
+
+        // 4. Fill gaps with remaining tasks, starting from the next highest frequency.
+        // Note: For tasks that share the max frequency, only fill (maxFreq - 1) spots
+        // because the very last instance sits at the end, not inside a gap.
+        for(int i = 24; i >= 0 && mp[i] > 0; i--) {
+            slotsAvailable -= min(mp[i], gapCount);
+        }
+
+        // 5. If slots remain, we must add them as "idle" time to the total task count.
+        // If slots are <= 0, it means all gaps are naturally filled by other tasks.
+        return slotsAvailable > 0 ? tasks.size() + slotsAvailable : tasks.size();
+    }
+};
