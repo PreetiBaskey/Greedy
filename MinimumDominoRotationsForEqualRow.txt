@@ -1,0 +1,50 @@
+//approach - 1
+//time complexity - O(n)
+//space complexity - O(1)
+class Solution {
+public:
+    /**
+     * Calculates the minimum swaps needed to make all elements in either 
+     * the 'top' or 'bottom' row equal to 'val'.
+     */
+    int findMin(vector<int> &top, vector<int> &bottom, int val) {
+        int n = top.size();
+        int topSwaps = 0;    // Swaps needed to make top row all 'val'
+        int bottomSwaps = 0; // Swaps needed to make bottom row all 'val'
+
+        for(int i = 0; i < n; i++) {
+            // If neither side has the target value, it's impossible for this 'val'
+            if(top[i] != val && bottom[i] != val)  {
+                return -1;
+            }
+            // If top isn't 'val', we MUST swap from bottom
+            else if(top[i] != val) {
+                topSwaps++;
+            }
+            // If bottom isn't 'val', we MUST swap from top
+            else if(bottom[i] != val) {
+                bottomSwaps++;
+            }
+        }
+
+        // Return the cheaper option between rotating to the top or bottom
+        return min(topSwaps, bottomSwaps);
+    }
+
+    int minDominoRotations(vector<int>& tops, vector<int>& bottoms) {
+        int result = INT_MAX;
+
+        // Try every possible domino face value (1 to 6)
+        for(int val = 1; val <= 6; val++) {
+            int swaps = findMin(tops, bottoms, val);
+            
+            // If a valid rotation was found for this value, track the minimum
+            if(swaps != -1) {
+                result = min(result, swaps);
+            }
+        }
+
+        // If result remains INT_MAX, no valid rotation sequence exists
+        return result == INT_MAX ? -1 : result;
+    }
+};
