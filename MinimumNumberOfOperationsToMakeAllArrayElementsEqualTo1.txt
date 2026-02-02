@@ -1,0 +1,37 @@
+//approach - 1
+//time complexity - O(n^2 * (log(max_val)))
+//space complexity - O(1)
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+        int count1 = 0;
+        int n = nums.size();
+        
+        // 1. Check for existing 1s. If any exist, we just need to spread them.
+        // Each swap with a 1 turns another number into 1 in exactly 1 operation.
+        for(int i = 0; i < n; i++) {
+            if(nums[i] == 1) count1++;
+        }
+        if(count1 > 0) return n - count1;
+
+        // 2. If no 1 exists, we must first "create" a 1 using GCD operations.
+        // We find the smallest subarray whose collective GCD is 1.
+        int operations = INT_MAX;
+        for(int i = 0; i < n; i++) {
+            int current_gcd = nums[i];
+            for(int j = i + 1; j < n; j++) {
+                current_gcd = __gcd(current_gcd, nums[j]);
+                
+                if(current_gcd == 1) {
+                    // Distance (j - i) represents the operations to create the first 1
+                    operations = min(operations, j - i);
+                    break; // Optimization: Found the shortest 1-producing range for this start index
+                }
+            }
+        }
+
+        // 3. Total operations = (ops to create the first 1) + (ops to spread it to n-1 elements)
+        // If 'operations' remains INT_MAX, it's impossible to ever create a 1.
+        return operations == INT_MAX ? -1 : operations + (n - 1);
+    }
+};
